@@ -6,8 +6,8 @@ let validationResult = require('express-validator').validationResult
  * Validation Function for the Request 
  * Rules of the different Controllers
  * 
- * @param {object} req 
- * @param {object} res 
+ * @param {*} req 
+ * @param {*} res 
  * @return {function|string} 
  */
 function validate(req, res, next) {

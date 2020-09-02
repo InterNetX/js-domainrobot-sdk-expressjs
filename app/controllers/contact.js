@@ -15,6 +15,34 @@ exports.requestRules = function() {
     ]
 }
 
+/*
+    Create Example Request
+
+    POST /api/contact
+    {
+      "type": "PERSON",
+      "alias": "SOMEALIAS",
+      "city": "Regensburg",
+      "country": "DE",
+      "state": "",
+      "street_no": "Johanna-Dachs-Straße 55",
+      "address_info": "ADDITIONAL INFO",
+      "pcode": "93055",
+      "fname": "SOME FIRSTNAME",
+      "lname": "SOME LASTNAME",
+      "email": "SOME@MAIL.COM",
+      "phone": "",
+      "commment": "SOME COMMENTS"
+    }
+*/
+
+/**
+ * Create an Contact
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @return {object} DomainRobotResult|DomainRobotException
+ */
 exports.create = async function(req, res) {
 
     let body = req.body
@@ -63,43 +91,75 @@ exports.create = async function(req, res) {
         })
     }
 
-    let result
-
     try {
-        result = await domainRobot.contact().create(contactModel)
+        let domainRobotResult = await domainRobot.contact().create(contactModel)
+        res.send(domainRobotResult)
     } catch (DomainRobotException) {
         console.log(DomainRobotException)
-        result = DomainRobotException
+        res.status(DomainRobotException.status).send(DomainRobotException)
     }
-
-    res.send(result)
 }
 
+/*
+    Read Example Request
+
+    GET /api/contact/{id}
+*/
+
+/**
+ * Get an Contact Info
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @return {object} DomainRobotResult|DomainRobotException
+ */
 exports.info = async function(req, res) {
 
-    let result
-
     try {
-        result = await domainRobot.contact().info(req.params.id)
+        let domainRobotResult = await domainRobot.contact().info(req.params.id)
+        res.send(domainRobotResult)
     } catch (DomainRobotException) {
         console.log(DomainRobotException)
-        result = DomainRobotException
+        res.status(DomainRobotException.status).send(DomainRobotException)
     }
-
-    res.send(result)
 }
 
+/*
+    Update Example Request
+
+    PUT /api/contact/{id}
+    {
+      "alias": "NEWALIAS",
+      "city": "Regensburg",
+      "country": "DE",
+      "state": "Bayern",
+      "street_no": "Johanna-Dachs-Straße 55",
+      "address_info": "ADDITIONAL INFO",
+      "pcode": "93055",
+      "fname": "SOME FIRSTNAME",
+      "email": "SOME@MAIL.COM",
+      "phone": "",
+      "commment": "SOME COMMENTS"
+    }
+*/
+
+/**
+ * Update an existing Contact
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @return {object} DomainRobotResult|DomainRobotException
+ */
 exports.update = async function(req, res) {
 
     let body = req.body
 
-    let result
-
     try {
 
-        let domainRobotResult = await domainRobot.contact().info(req.params.id)
+        // DomainRobotResult
+        let contactInfo = await domainRobot.contact().info(req.params.id)
 
-        let contact = domainRobotResult.result.data[0]
+        let contact = contactInfo.result.data[0]
 
         if (body.alias) {
             contact.alias = body.alias
@@ -160,35 +220,69 @@ exports.update = async function(req, res) {
             })
         }
 
-        result = await domainRobot.contact().update(contact)
+        let domainRobotResult = await domainRobot.contact().update(contact)
+        res.send(domainRobotResult)
 
     } catch(DomainRobotException) {
         console.log(DomainRobotException)
-        result = DomainRobotException
+        res.status(DomainRobotException.status).send(DomainRobotException)
     }
-
-    res.send(result)
 }
 
+/*
+    Delete Example Request
+
+    DELETE /api/contact/{id}
+*/
+
+/**
+ * Delete an existing Contact
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @return {object} DomainRobotResult|DomainRobotException
+ */
 exports.delete = async function(req, res) {
 
-    let result
-
     try {
-        result = await domainRobot.contact().delete(req.params.id)
+        let domainRobotResult = await domainRobot.contact().delete(req.params.id)
+        res.send(domainRobotResult)
     } catch (DomainRobotException) {
         console.log(DomainRobotException)
-        result = DomainRobotException
+        res.status(DomainRobotException.status).send(DomainRobotException)
     }
-
-    res.send(result)
 }
 
+/*
+    List Example Request
+
+    POST /api/contact/_search
+    {
+      "filters": [
+        {
+          "key": "fname",
+          "value": "First%",
+          "operator": "LIKE"
+        },
+        {
+          "key": "lname",
+          "value": "%name%",
+          "operator": "NOT_LIKE"
+        }
+      ]
+    }
+*/
+
+/**
+ * List Contact
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @return {object} DomainRobotResult|DomainRobotException
+ */
 exports.list = async function(req, res) {
 
     let body = req.body
-
-    let result
 
     try {
 
@@ -206,12 +300,11 @@ exports.list = async function(req, res) {
             })
         });
 
-        result = await domainRobot.contact().list(query)
+        let domainRobotResult = await domainRobot.contact().list(query)
+        res.send(domainRobotResult)
 
     } catch (DomainRobotException) {
         console.log(DomainRobotException)
-        result = DomainRobotException
+        res.status(DomainRobotException.status).send(DomainRobotException)
     }
-
-    res.send(result)
 }

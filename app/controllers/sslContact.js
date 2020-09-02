@@ -17,6 +17,34 @@ exports.requestRules = function() {
     ]
 }
 
+/*
+    Create Example Request
+
+    POST /api/sslcontact
+    {
+      "organization": "InterNetX GmbH",
+      "city": "Regensburg",
+      "state": "Bavaria",
+      "country": "DE",
+      "street_no": "Johanna-Dachs-Straße 55",
+      "address_info": "Second Floor",
+      "pcode": "93055",
+      "title": "Mr.",
+      "fname": "John",
+      "lname": "Doe",
+      "email": "john.doe@internetx.com",
+      "phone": "+49 123 45678",
+      "fax": "+49 123 45679"
+    }
+*/
+
+/**
+ * Create an SslContact
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @return {object} DomainRobotResult|DomainRobotException
+ */
 exports.create = async function(req, res) {
 
     let body = req.body
@@ -39,43 +67,69 @@ exports.create = async function(req, res) {
     sslContactModel.phone = body.phone ?? null
     sslContactModel.fax = body.fax ?? null
 
-    let result
-
     try {
-        result = await domainRobotSSL.sslcontact().create(sslContactModel)
+        let domainRobotResult = await domainRobotSSL.sslcontact().create(sslContactModel)
+        res.send(domainRobotResult)
     } catch (DomainRobotException) {
         console.log(DomainRobotException)
-        result = DomainRobotException
+        res.status(DomainRobotException.status).send(DomainRobotException)
     }
-
-    res.send(result)
 }
 
+/*
+    Read Example Request
+
+    GET /api/sslcontact/{id}
+*/
+
+/**
+ * Get an SslContact Info
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @return {object} DomainRobotResult|DomainRobotException
+ */
 exports.info = async function(req, res) {
 
-    let result
-
     try {
-        result = await domainRobotSSL.sslcontact().info(req.params.id)
+        let domainRobotResult = await domainRobotSSL.sslcontact().info(req.params.id)
+        res.send(domainRobotResult)
     } catch (DomainRobotException) {
         console.log(DomainRobotException)
-        result = DomainRobotException
+        res.status(DomainRobotException.status).send(DomainRobotException)
     }
-
-    res.send(result)
 }
 
+/*
+    Update Example Request
+
+    PUT /api/sslcontact/{id}
+    {
+      "address_info": "Third Floor",
+      "title": "Mrs.",
+      "fname": "Jane",
+      "email": "jane.doe@internetx.com",
+      "phone": "+49 321 45678"
+    }
+*/
+
+/**
+ * Update an existing Contact
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @return {object} DomainRobotResult|DomainRobotException
+ */
 exports.update = async function(req, res) {
 
     let body = req.body
 
-    let result
-
     try {
 
-        let domainRobotResult = await domainRobotSSL.sslcontact().info(req.params.id)
+        // DomainRobotResult
+        let sslContactInfo = await domainRobotSSL.sslcontact().info(req.params.id)
 
-        let sslContact = domainRobotResult.result.data[0]
+        let sslContact = sslContactInfo.result.data[0]
 
         if (body.organization) {
             sslContact.organization = body.organization
@@ -128,35 +182,69 @@ exports.update = async function(req, res) {
             sslContact.fax = body.fax
         }
 
-        result = await domainRobotSSL.sslcontact().update(sslContact)
+        let domainRobotResult = await domainRobotSSL.sslcontact().update(sslContact)
+        res.send(domainRobotResult)
 
     } catch(DomainRobotException) {
         console.log(DomainRobotException)
-        result = DomainRobotException
+        res.status(DomainRobotException.status).send(DomainRobotException)
     }
-
-    res.send(result)
 }
 
+/*
+    Delete Example Request
+
+    DELETE /api/sslcontact/{id}
+*/
+
+/**
+ * Delete an existing SslContact
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @return {object} DomainRobotResult|DomainRobotException
+ */
 exports.delete = async function(req, res) {
 
-    let result
-
     try {
-        result = await domainRobotSSL.sslcontact().delete(req.params.id)
+        let domainRobotResult = await domainRobotSSL.sslcontact().delete(req.params.id)
+        res.send(domainRobotResult)
     } catch (DomainRobotException) {
         console.log(DomainRobotException)
-        result = DomainRobotException
+        res.status(DomainRobotException.status).send(DomainRobotException)
     }
-
-    res.send(result)
 }
 
+/*
+    List Example Request
+
+    POST /api/sslcontact/_search
+    {
+      "filters": [
+        {
+          "key": "id",
+          "value": "2110",
+          "operator": "GREATER"
+        },
+        {
+          "key": "organization",
+          "value": "InterNetX%",
+          "operator": "LIKE"
+        }
+      ]
+    }
+*/
+
+/**
+ * List SslContact
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @return {object} DomainRobotResult|DomainRobotException
+ */
 exports.list = async function(req, res) {
 
     let body = req.body
-
-    let result
 
     try {
 
@@ -174,12 +262,11 @@ exports.list = async function(req, res) {
             })
         });
 
-        result = await domainRobotSSL.sslcontact().list(query)
+        let domainRobotResult = await domainRobotSSL.sslcontact().list(query)
+        res.send(domainRobotResult)
 
     } catch (DomainRobotException) {
         console.log(DomainRobotException)
-        result = DomainRobotException
+        res.status(DomainRobotException.status).send(DomainRobotException)
     }
-
-    res.send(result)
 }

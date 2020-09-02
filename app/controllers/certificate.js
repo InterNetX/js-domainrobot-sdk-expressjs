@@ -19,6 +19,23 @@ exports.prepareRequestRules = function() {
     ]
 }
 
+/*
+    Create Example Request
+
+    POST /api/certificate
+    {
+        "name": "domainname.com",
+        "sslcontact_id": "2112"
+    }
+*/
+
+/**
+ * Create a Certificate
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @return {object} DomainRobotResult|DomainRobotException
+ */
 exports.create = async function(req, res) {
 
     let body = req.body
@@ -27,9 +44,10 @@ exports.create = async function(req, res) {
 
     certifcateModel.name = body.name
 
-    let domainRobotResult = await domainRobotSSL.sslcontact().info(body.sslcontact_id)
+    // DomainRobotResult
+    let sslContactInfo = await domainRobotSSL.sslcontact().info(body.sslcontact_id)
     
-    let sslContact = domainRobotResult.result.data[0]
+    let sslContact = sslContactInfo.result.data[0]
 
     certifcateModel.adminContact = sslContact
     certifcateModel.technicalContact = sslContact
@@ -46,18 +64,32 @@ exports.create = async function(req, res) {
 
     certifcateModel.csr = generateCsr(body.name)
 
-    let result
-
     try {
-        result = await domainRobotSSL.certificate().create(certifcateModel)
+        let domainRobotResult = await domainRobotSSL.certificate().create(certifcateModel)
+        res.send(domainRobotResult)
     } catch (DomainRobotException) {
         console.log(DomainRobotException)
-        result = DomainRobotException
+        res.status(DomainRobotException.status).send(DomainRobotException)
     }
-
-    res.send(result)
 }
 
+/*
+    Create Realtime Example Request
+
+    POST /api/certificate/_realtime
+    {
+        "name": "domainname.com",
+        "sslcontact_id": "2112"
+    }
+*/
+
+/**
+ * Create a Certificate in realtime
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @return {object} DomainRobotResult|DomainRobotException
+ */
 exports.createRealtime = async function(req, res) {
     
     let body = req.body
@@ -66,9 +98,10 @@ exports.createRealtime = async function(req, res) {
 
     certifcateModel.name = body.name
 
-    let domainRobotResult = await domainRobotSSL.sslcontact().info(body.sslcontact_id)
+    // DomainRobotResult
+    let sslContactInfo = await domainRobotSSL.sslcontact().info(body.sslcontact_id)
 
-    let sslContact = domainRobotResult.result.data[0]
+    let sslContact = sslContactInfo.result.data[0]
 
     certifcateModel.adminContact = sslContact
     certifcateModel.technicalContact = sslContact
@@ -85,18 +118,30 @@ exports.createRealtime = async function(req, res) {
 
     certifcateModel.csr = generateCsr(body.name)
 
-    let result
-
     try {
-        result = await domainRobotSSL.certificate().createRealtime(certifcateModel)
+        let domainRobotResult = await domainRobotSSL.certificate().createRealtime(certifcateModel)
+        res.send(domainRobotResult)
     } catch (DomainRobotException) {
         console.log(DomainRobotException)
-        result = DomainRobotException
+        res.status(DomainRobotException.status).send(DomainRobotException)
     }
-
-    res.send(result)
 }
 
+/*
+    Prepare Order Example Request
+
+    POST /api/certificate/_prepareOrder
+    {
+        "name": "domainname.com"
+    }
+*/
+
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @return {object} DomainRobotResult|DomainRobotException
+ */
 exports.prepareOrder = async function(req, res) {
     
     let body = req.body
@@ -111,51 +156,86 @@ exports.prepareOrder = async function(req, res) {
 
     certifcateDataModel.csr = csr
 
-    let result
-
     try {
-        result = await domainRobotSSL.certificate().prepareOrder(certifcateDataModel)
+        let domainRobotResult = await domainRobotSSL.certificate().prepareOrder(certifcateDataModel)
+        res.send(domainRobotResult)
     } catch (DomainRobotException) {
         console.log(DomainRobotException)
-        result = DomainRobotException
+        res.status(DomainRobotException.status).send(DomainRobotException)
     }
-
-    res.send(result)
 }
 
+/*
+    Read Example Request
+
+    GET /api/certificate/{id}
+*/
+
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @return {object} DomainRobotResult|DomainRobotException
+ */
 exports.info = async function(req, res) {
-    
-    let result
 
     try {
-        result = await domainRobotSSL.certificate().info(req.params.id)
+        let domainRobotResult = await domainRobotSSL.certificate().info(req.params.id)
+        res.send(domainRobotResult)
     } catch (DomainRobotException) {
         console.log(DomainRobotException)
-        result = DomainRobotException
+        res.status(DomainRobotException.status).send(DomainRobotException)
     }
-
-    res.send(result)
 }
 
+/*
+    Delete Example Request
+
+    DELETE /api/certificate/{id}
+*/
+
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @return {object} DomainRobotResult|DomainRobotException
+ */
 exports.delete = async function(req, res) {
     
-    let result
-
     try {
-        result = await domainRobotSSL.certificate().delete(req.params.id)
+        let domainRobotResult = await domainRobotSSL.certificate().delete(req.params.id)
+        res.send(domainRobotResult)
     } catch (DomainRobotException) {
         console.log(DomainRobotException)
-        result = DomainRobotException
+        res.status(DomainRobotException.status).send(DomainRobotException)
     }
-
-    res.send(result)
 }
 
+/*
+    List Example Request
+
+    POST /api/certificate/_search
+    {
+        "filters": [
+            {
+                "key": "name",
+                "value": "%domain%",
+                "operator": "LIKE"
+            }
+        ]  
+    }
+*/
+
+/**
+ * List Certificates
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @return {object} DomainRobotResult|DomainRobotException
+ */
 exports.list = async function(req, res) {
     
     let body = req.body
-
-    let result
 
     try {
 
@@ -173,12 +253,11 @@ exports.list = async function(req, res) {
             })
         });
 
-        result = await domainRobotSSL.certificate().list(query)
+        let domainRobotResult = await domainRobotSSL.certificate().list(query)
+        res.send(domainRobotResult)
 
     } catch (DomainRobotException) {
         console.log(DomainRobotException)
-        result = DomainRobotException
+        res.status(DomainRobotException.status).send(DomainRobotException)
     }
-
-    res.send(result)
 }

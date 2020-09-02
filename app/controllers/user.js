@@ -12,25 +12,55 @@ exports.requestRules = function() {
     ]
 }
 
+/*
+    Read Example Request
+
+    GET /api/user/{username}/{context}
+*/
+
+/**
+ * Get an User Info
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @return {object} DomainRobotResult|DomainRobotException
+ */
 exports.info = async function(req, res) {
 
-    let result
-
     try {
-        result = await domainRobot.user().info(req.params.name, req.params.context)
+        let domainRobotResult = await domainRobot.user().info(req.params.username, req.params.context)
+        res.send(domainRobotResult)
     } catch (DomainRobotException) {
         console.log(DomainRobotException)
-        result = DomainRobotException
+        res.status(DomainRobotException.status).send(DomainRobotException)
     }
-
-    res.send(result)
 }
 
+/*
+    List Example Request
+
+    POST /api/user/_search
+    {
+      "filters": [
+        {
+          "key": "status",
+          "value": "2",
+          "operator": "EQUAL"
+        }
+      ]
+    }
+*/
+
+/**
+ * List User
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @return {object} DomainRobotResult|DomainRobotException
+ */
 exports.list = async function(req, res) {
 
     let body = req.body
-
-    let result
 
     try {
 
@@ -48,12 +78,11 @@ exports.list = async function(req, res) {
             })
         });
 
-        result = await domainRobot.user().list(query)
+        let domainRobotResult = await domainRobot.user().list(query)
+        res.send(domainRobotResult)
 
     } catch (DomainRobotException) {
         console.log(DomainRobotException)
-        result = DomainRobotException
+        res.status(DomainRobotException.status).send(DomainRobotException)
     }
-
-    res.send(result)
 }
