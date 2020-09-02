@@ -1,4 +1,4 @@
-# Example Implementation of the InterNetX PHP Domainrobot SDK
+# Example Implementation of the InterNetX JS Domainrobot SDK
 
 ## Preamble
 
