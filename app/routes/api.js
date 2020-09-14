@@ -27,10 +27,31 @@ router.put('/domain/:name/_restore', domain.requestRules(), validate, domain.res
 router.post('/domain/restore/_search', domain.restoreList)
 router.post('/domain/_transfer', domain.requestRules(), validate, domain.transfer)
 
+let user2fa = require('../controllers/user2fa')
+
+router.get('/OTPAuth', user2fa.tokenConfigInfo)
+router.post('/OTPAuth', user2fa.tokenConfigCreate)
+router.put('/user/_2fa', user2fa.tokenRules(), validate, user2fa.tokenConfigActivate)
+router.delete('/user/_2fa', user2fa.tokenRules(), validate, user2fa.tokenConfigDelete)
+
 let user = require('../controllers/user')
 
-router.get('/user/:username/:context', user.info)
+router.post('/user', user.createRequestRules(), validate, user.create)
+router.put('/user/:user/:context/_lock', user.requestRules(), validate, user.updateLock)
+router.put('/user/:user/:context/_unlock', user.requestRules(), validate, user.updateUnlock)
+router.post('/user/:user/:context/copy', user.copyRequestRules(), validate, user.copy)
+router.get('/user/:user/:context/profile/:prefix', user.requestRules(), validate, user.profileInfo)
+router.get('/user/:user/:context/profile', user.requestRules(), validate, user.profileInfo)
+router.put('/user/:user/:context/profile', user.requestRules(), validate, user.profileUpdate)
+router.get('/user/:user/:context/serviceProfile/:prefix', user.requestRules(), validate, user.serviceProfileInfo)
+router.get('/user/:user/:context/serviceProfile', user.requestRules(), validate, user.serviceProfileInfo)
+router.put('/user/:user/:context/serviceProfile', user.requestRules(), validate, user.serviceProfileUpdate)
+router.get('/user/:user/:context', user.requestRules(), validate, user.info)
+router.put('/user/:user/:context', user.requestRules(), validate, user.update)
+router.delete('/user/:user/:context', user.requestRules(), validate, user.delete)
 router.post('/user/_search', user.list)
+router.get('/user/billinglimit', user.billingObjectLimitInfo)
+router.get('/user/billingterm', user.billingObjectTermsInfo)
 
 let sslContact = require('../controllers/sslContact')
 
@@ -48,5 +69,9 @@ router.post('/certificate/_prepareOrder', certificate.prepareRequestRules(), val
 router.get('/certificate/:id([0-9]+)', certificate.info)
 router.delete('/certificate/:id([0-9]+)', certificate.delete)
 router.post('/certificate/_search', certificate.list)
+
+let domainStudio = require('../controllers/domainstudio')
+
+router.post('/domainstudio', domainStudio.search)
 
 module.exports = router

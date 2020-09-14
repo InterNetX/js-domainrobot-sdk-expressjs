@@ -9,6 +9,8 @@ let domainRobotSSL = new DomainRobot({
         password: process.env.DOMAINROBOT_SSL_PASSWORD,
         context: process.env.DOMAINROBOT_SSL_CONTEXT
     }
-}) 
+})
+
+Object.freeze(domainRobotSSL)
 
 module.exports = domainRobotSSL

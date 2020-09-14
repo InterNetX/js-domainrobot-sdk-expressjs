@@ -334,11 +334,12 @@ exports.renew = async function(req, res) {
     try {
 
         // DomainRobotResult
-        let contactInfo = await domainRobot.domain().info(req.params.name)
+        let domainInfo = await domainRobot.domain().info(req.params.name)
 
-        let domain = contactInfo.result.data[0]
+        let domain = domainInfo.result.data[0]
         
         let domainRobotResult = await domainRobot.domain().renew(domain)
+        
         res.send(domainRobotResult)
 
     } catch (DomainRobotException) {

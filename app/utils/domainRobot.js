@@ -9,6 +9,8 @@ let domainRobot = new DomainRobot({
         password: process.env.DOMAINROBOT_PASSWORD,
         context: process.env.DOMAINROBOT_CONTEXT
     }
-}) 
+})
+
+Object.freeze(domainRobot)
 
 module.exports = domainRobot

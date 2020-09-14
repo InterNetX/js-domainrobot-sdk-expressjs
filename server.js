@@ -1,18 +1,19 @@
 'use strict'
 
-
-// let DomainRobot = require("js-domainrobot-sdk").DomainRobot
-// console.log(DomainRobot)
-
 require('dotenv').config()
 
 let express = require('express')
-let bodyParser = require('body-parser')
 
 let app = express()
 
+let bodyParser = require('body-parser')
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+
+let passtroughHeaders = require('./app/utils/passthroughHeaders')
+
+app.use(passtroughHeaders)
 
 let router = require('./app/routes/api.js')
 
