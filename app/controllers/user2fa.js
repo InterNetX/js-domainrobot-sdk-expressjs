@@ -29,8 +29,6 @@ exports.tokenRules = function() {
  */
 exports.tokenConfigInfo = async function(req, res) {
 
-    let token = req.headers[DomainRobotHeaders.DOMAINROBOT_HEADER_2FA_TOKEN.toLowerCase()]
-    console.log(domainRobot)
     try {
         let domainRobotResult = await domainRobot.user2fa().tokenConfigInfo()
         res.send(domainRobotResult)
