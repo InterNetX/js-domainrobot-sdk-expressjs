@@ -4,6 +4,9 @@ let DomainRobotHeaders = require("js-domainrobot-sdk").DomainRobotHeaders
 let domainRobot = require('./domainRobot')
 let domainRobotSSL = require('./domainRobotSSL')
 
+// var testus = 0;
+
+
 /**
  * Pass the to the Application sent Headers through to 
  * AutoDNS if they are valid Domainrobot Headers

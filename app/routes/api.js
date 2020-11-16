@@ -74,4 +74,9 @@ let domainStudio = require('../controllers/domainstudio')
 
 router.post('/domainstudio', domainStudio.search)
 
+let whois = require('../controllers/whois')
+
+router.get('/whois/:domain', whois.single)
+router.post('/whois', whois.multi)
+
 module.exports = router

@@ -48,6 +48,10 @@ exports.search = async function(req, res) {
     domainEnvelopeSearchRequest.searchToken = body.searchToken
     domainEnvelopeSearchRequest.currency = body.currency
 
+    if (body.forceDnsCheck) {
+        domainEnvelopeSearchRequest.forceDnsCheck = body.forceDnsCheck
+    }
+    
     try {
 
         let domainRobotResult = await domainRobot.domainStudio()

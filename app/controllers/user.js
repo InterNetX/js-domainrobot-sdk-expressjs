@@ -42,8 +42,8 @@ exports.copyRequestRules = function() {
           "fname": "firstname",
           "lname": "lastname",
           "organization": "InterNetX GmbH",
-          "phone": "+49 941 12345-67"
-          "passwordResetEmail": ""
+          "phone": "+49 941 12345-67",
+          "passwordResetEmail": "mail@example.com"
       }
     }
 */
@@ -67,16 +67,16 @@ exports.create = async function(req, res) {
     user.password = body.password ?? null
 
     if (
-        user.details &&
-        user.details.constructor === Object &&
-        Object.keys(user.details).length > 0
+        body.details &&
+        body.details.constructor === Object &&
+        Object.keys(body.details).length > 0
     ) {
         user.details = new DomainRobotModels.UserDetails({
-            'fname': body.detail.fname ?? null,
-            'lname': body.detail.lname ?? null,
-            'organization': body.detail.organization ?? null,
-            'phone': body.detail.phone ?? null,
-            'passwordResetEmail': body.detail.passwordResetEmail ?? null
+            'fname': body.details.fname ?? null,
+            'lname': body.details.lname ?? null,
+            'organization': body.details.organization ?? null,
+            'phone': body.details.phone ?? null,
+            'passwordResetEmail': body.details.passwordResetEmail ?? null
         })
     }
 
@@ -148,10 +148,6 @@ exports.update = async function(req, res) {
         let userInfo = await domainRobot.user().info(params.user, params.context)
 
         let user = userInfo.result.data[0]
-
-        if (body.user) {
-            user.user = body.user
-        }
 
         if (body.context) {
             user.context = body.context
