@@ -79,4 +79,8 @@ let whois = require('../controllers/whois')
 router.get('/whois/:domain', whois.single)
 router.post('/whois', whois.multi)
 
+let domainBulk = require('../controllers/domainBulk')
+
+router.patch('/bulk/domain', domainBulk.update)
+
 module.exports = router
