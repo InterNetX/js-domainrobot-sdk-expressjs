@@ -45,6 +45,14 @@ exports.requestRules = function() {
  */
 exports.create = async function(req, res) {
 
+    let keys = []
+    if (
+        req.query.keys &&
+        Array.isArray(req.query.keys)
+    ) {
+        keys = req.query.keys
+    }
+
     let body = req.body
 
     let contactModel = new DomainRobotModels.Contact()
@@ -91,8 +99,12 @@ exports.create = async function(req, res) {
         })
     }
 
+    if (body.confirm_owner_consent) {
+        contactModel.confirmOwnerConsent = body.confirm_owner_consent
+    }
+
     try {
-        let domainRobotResult = await domainRobot.contact().create(contactModel)
+        let domainRobotResult = await domainRobot.contact().create(contactModel, keys)
         res.send(domainRobotResult)
     } catch (DomainRobotException) {
         console.log(DomainRobotException)
@@ -218,6 +230,10 @@ exports.update = async function(req, res) {
             it: new DomainRobotModels.ContactItExtensions({
                 'entityType': 2 // Italian and foreign natural persons
             })
+        }
+
+        if (body.confirm_owner_consent) {
+            contact.confirmOwnerConsent = body.confirm_owner_consent
         }
 
         let domainRobotResult = await domainRobot.contact().update(contact)

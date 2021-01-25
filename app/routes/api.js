@@ -83,4 +83,15 @@ let domainBulk = require('../controllers/domainBulk')
 
 router.patch('/bulk/domain', domainBulk.update)
 
+let pcDomains = require('../controllers/pcDomains')
+
+router.post('/estimate', pcDomains.estimationRules(), validate, pcDomains.estimation)
+router.get('/alexa/:domain', pcDomains.alexa)
+router.post('/keyword', pcDomains.keywordRules(), validate, pcDomains.keyword)
+router.get('/meta/:domain', pcDomains.meta)
+router.get('/sistrix/:domain/:country', pcDomains.sistrix)
+router.post('/majestic', pcDomains.majesticRules(), validate, pcDomains.majestic)
+router.get('/smu_check/:username', pcDomains.smuCheck)
+router.get('/wayback/:domain', pcDomains.wayback)
+
 module.exports = router
